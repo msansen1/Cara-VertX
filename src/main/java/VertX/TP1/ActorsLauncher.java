@@ -8,16 +8,17 @@ import io.vertx.core.Vertx;
 
 public class ActorsLauncher {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
     System.out.println("Start of Actors Launcher");
 
     final Vertx vertx = Vertx.vertx();
-    vertx.deployVerticle(CuisinierVerticle.class.getName());
     vertx.deployVerticle(ChefVerticle.class.getName());
-    //lancer plusieurs instances de serveurVerticle
-    final DeploymentOptions options = new DeploymentOptions() //
+    vertx.deployVerticle(CuisinierVerticle.class.getName());
+    /**lancer plusieurs instances de serveurVerticle
+    final DeploymentOptions options = new DeploymentOptions()
       .setInstances(5);
-    vertx.deployVerticle(ServeurVerticle.class.getName(), options);
+     **/
+    vertx.deployVerticle(ServeurVerticle.class.getName());
 
     System.out.println("End of Actors Launcher");
 

@@ -3,6 +3,7 @@ package VertX.TP1.Actors;
 import io.vertx.core.AbstractVerticle;
 
 public class CuisinierVerticle extends AbstractVerticle {
+
   @Override
   public void start() throws Exception {
     System.out.println("Start of Cuisinier Verticle");
