@@ -14,7 +14,7 @@ public class ChefVerticle extends AbstractVerticle {
     final EventBus bus = vertx.eventBus();
     final MessageConsumer<String> consumer = bus.consumer(address);
       consumer.handler(message -> {
-        System.out.println("incoming message " + message.body());
+        System.out.println("incoming message: " + message.body());
       });
   }
 
