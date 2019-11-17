@@ -10,6 +10,10 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.shareddata.Counter;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class ServeurVerticle extends AbstractVerticle {
 
   final String message="[Serveur]:j'ai une commande";
@@ -21,6 +25,10 @@ public class ServeurVerticle extends AbstractVerticle {
   final int period = 3000;
 
   final static String serveurMessageIntro = "[Serveur] - ";
+
+  //La carte du restaurant
+  public static ArrayList<String> menu = (ArrayList<String>) Stream.of("La carbonade flamande", "Welsh", "Le chicon-gratin", "Joues de porc au maroilles", "Flamiche au maroilles", "Plat du Jour", "Tajine", "Couscous Royal").collect(Collectors.toList());
+
 
   private int clientId=0;
 
@@ -36,6 +44,8 @@ public class ServeurVerticle extends AbstractVerticle {
       System.out.println(client.toString());
       JsonObject reply = new JsonObject().put("result", "ok");
       res.reply(reply);
+
+      //System.out.println(Json.encode(menu));
 
 
     });
