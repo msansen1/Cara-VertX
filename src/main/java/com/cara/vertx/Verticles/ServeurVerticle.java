@@ -4,6 +4,7 @@ import com.cara.vertx.domain.Client;
 import com.cara.vertx.enums.ClientStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.Json;
 import io.vertx.core.shareddata.AsyncMap;
 
 public class ServeurVerticle extends AbstractVerticle {
@@ -27,7 +28,7 @@ public class ServeurVerticle extends AbstractVerticle {
           // Local-only async map
           AsyncMap<Object, Object> map = res.result();
           Client c1 = new Client();
-          map.put("1", c1.toString(), resPut -> {
+          map.put("1", Json.encode(c1), resPut -> {
             if (resPut.succeeded()) {
               // Successfully put the value
             } else {

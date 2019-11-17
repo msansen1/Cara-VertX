@@ -3,8 +3,11 @@ package com.cara.vertx.domain;
 import com.cara.vertx.enums.ClientStatus;
 import com.cara.vertx.enums.CommandeStatus;
 import com.cara.vertx.messages.CommandeClient;
+import io.vertx.core.json.JsonObject;
 
-public class Client {
+import java.io.Serializable;
+
+public class Client implements Serializable {
 
   private int id;
   private int cs;
