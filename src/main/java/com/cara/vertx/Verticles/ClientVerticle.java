@@ -13,7 +13,7 @@ public class ClientVerticle extends AbstractVerticle {
     System.out.println("Start of Client Verticle");
 
     final EventBus bus = vertx.eventBus();
-    bus.send(clientAddress,"Bonjour, auriez vous une table pour deux personnes?");
+    bus.send(clientAddress,"Bonjour, auriez vous une table disponible?");
   }
 
   @Override
