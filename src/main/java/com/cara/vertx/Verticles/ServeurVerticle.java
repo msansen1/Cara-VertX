@@ -50,7 +50,7 @@ public class ServeurVerticle extends AbstractVerticle {
 
             vertx
               .sharedData()
-              .getCounter(
+              .getLocalCounter(
                 "nbPlacesRestaurant",
                 resultHandler -> {
                   final Counter counter = resultHandler.result();
@@ -98,12 +98,25 @@ public class ServeurVerticle extends AbstractVerticle {
 
   private void accueilNouveauClient() {
     //ajoute le client a la map
-    vertx.sharedData().getAsyncMap("clientMap", addAr -> {
+    vertx.sharedData().getLocalAsyncMap("clientMap", addAr -> {
       if (addAr.succeeded()) {
         // Local-only async map
         AsyncMap<Object, Object> map = addAr.result();
         double x = Math.random();
-        getVertx().sharedData().getLock("addMap", mar -> System.out.println(mar.result()));
+        getVertx().sharedData().getLock("addMap", mar ->
+        {
+          if (mar.succeeded()) {
+            System.out.println("locked"+ mar.result());
+            Client c1 = new Client(++clientId);
+            map.put(x, Json.encode(c1), resPut -> {
+              if (resPut.succeeded()) {
+                // Successfully put the value
+              } else {
+                // Something went wrong!
+              }
+            });
+          }
+        });
         Client c1 = new Client(++clientId);
         map.put(x, Json.encode(c1), resPut -> {
           if (resPut.succeeded()) {

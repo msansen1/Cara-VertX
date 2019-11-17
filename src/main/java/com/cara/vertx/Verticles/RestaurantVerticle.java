@@ -21,7 +21,7 @@ public class RestaurantVerticle extends AbstractVerticle {
 
     //TODO recuperer la capacité du restaurant depuis le Launcher
     //On définit la capacité du restaurant dans un compteur
-    vertx.sharedData().getCounter(
+    vertx.sharedData().getLocalCounter(
         "nbPlacesRestaurant",
         ar -> {
           if (ar.succeeded()){
@@ -38,7 +38,7 @@ public class RestaurantVerticle extends AbstractVerticle {
           }
         });
 
-    vertx.sharedData().getCounter(
+    vertx.sharedData().getLocalCounter(
       "capacitéRestaurant",
       ar2 -> {
         if (ar2.succeeded()){
@@ -55,7 +55,7 @@ public class RestaurantVerticle extends AbstractVerticle {
         }
       });
 
-    vertx.sharedData().<Integer, String>getAsyncMap("clientMap", res -> {
+    vertx.sharedData().<Integer, String>getLocalAsyncMap("clientMap", res -> {
       if (res.succeeded()) {
         AsyncMap<Integer, String> map = res.result();
       } else {
