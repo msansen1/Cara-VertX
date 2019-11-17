@@ -26,6 +26,11 @@ public class ClientVerticle extends AbstractVerticle {
       }
     });
 
+    eventbus.consumer("GreetingService", message -> {
+      JsonObject reply = new JsonObject().put("message", "Hello World!");
+      message.reply(reply);
+    });
+
     /*
     vertx.setPeriodic(period, (l) -> {
       eventbus.send(serveurAddress,"UpdateMe");

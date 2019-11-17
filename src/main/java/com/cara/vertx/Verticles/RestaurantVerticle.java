@@ -38,6 +38,23 @@ public class RestaurantVerticle extends AbstractVerticle {
           }
         });
 
+    vertx.sharedData().getCounter(
+      "capacitéRestaurant",
+      ar2 -> {
+        if (ar2.succeeded()){
+          Counter counter = ar2.result();
+          counter.addAndGet(10,opAr -> {
+            if(opAr.succeeded()){
+              System.out.println("[succeeded] NBRPLACES:"+opAr.result());
+            }else {
+              System.out.println(opAr.cause());
+            }
+          });
+        }else {
+          System.out.println(ar2.cause());
+        }
+      });
+
     vertx.sharedData().<Integer, String>getAsyncMap("clientMap", res -> {
       if (res.succeeded()) {
         AsyncMap<Integer, String> map = res.result();

@@ -8,6 +8,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.AsyncMap;
+import io.vertx.core.shareddata.Counter;
 
 public class ServeurVerticle extends AbstractVerticle {
 
@@ -21,63 +22,90 @@ public class ServeurVerticle extends AbstractVerticle {
 
   final static String serveurMessageIntro = "[Serveur] - ";
 
+  private int clientId=0;
+
   @Override
   public void start() throws Exception {
     System.out.println("Start of Serveur Verticle");
     final EventBus eventBus = vertx.eventBus();
 
 
-    //eventBus.send(chefAddress,message);
-
-    vertx.setPeriodic(period, (l) -> {
-      eventBus.send(ClientAddress, "Tout va bien ?");
-    });
-/*
-    final MessageConsumer<String> consumer = eventBus.consumer(serveurAddress);
-    consumer.handler(message -> {
-      System.out.println(serveurMessageIntro + message.body());
-      //TODO verifier capacité du restaurant
-      accueilNouveauClient();
-    });*/
-/*
-    eventBus.consumer(serveurAddress, msg -> {
-      msg.replyAndRequest("Une table?", response -> {
-        eventBus.send()
-      });
-    });*/
-
-    eventBus.consumer(serveurAddress, res->{
-      // receive a message
-      //JsonObject payload = JsonObject.mapFrom(res.body());
-      //JsonObject reply = new JsonObject().put("result", "ok");
-      //TODO verifier capacité du restaurant
-      //if ()
-
-      String reply = serveurMessageIntro + "> Oui";
-      accueilNouveauClient();
-      res.replyAndRequest(reply, res2->{
-        if (res2.succeeded()){
-          System.out.println( serveurMessageIntro + " reply was received...");
-        } else {
-          System.out.println( serveurMessageIntro + " reply failed...");
-        }
-      });
-    });
-
     //periodiquement:
     //solliciter un verticle Client
-      //selon son etat, faire avancer son workflow
+    //selon son etat, faire avancer son workflow
+    vertx.setPeriodic(period, (l) -> {
+
+      getVertx().sharedData().getAsyncMap("clientMap", mapAr-> {
+        System.out.println("LOOPING ON MAP");
+        mapAr.result().values( var -> var.result().forEach( x -> System.out.println("Key : " + x.toString())));
+      });
+
+      eventBus.send(ClientAddress, "Tout va bien ?");
+    });
+
+    eventBus.consumer(serveurAddress, res-> {
+        // receive a message
+        switch(res.body().toString()) {
+          case "Une table?":
+
+            vertx
+              .sharedData()
+              .getCounter(
+                "nbPlacesRestaurant",
+                resultHandler -> {
+                  final Counter counter = resultHandler.result();
+                  counter.get( getAr -> {
+                    //Long nbPlaces = getAr.result();
+                    //System.out.println("COUNTER:" + nbPlaces);
+                    if ( getAr.result() > 0 ){
+                      counter.decrementAndGet( decAr -> {
+                        if (decAr.succeeded()){
+
+                          JsonObject reply = new JsonObject().put("result", "ok");
+                          accueilNouveauClient();
+                          res.reply(reply);
+
+                          System.out.println("Capacité restante du restaurant: " + decAr.result());
+                        }
+                      });
+                    }else {
+                      System.out.println( serveurMessageIntro + " Plus de place");
+                    }
+                  });
+
+
+                });
+
+            //JsonObject reply = new JsonObject().put("result", "ok");
+            //res.reply(reply);
+            break;
+          case "Une Biere?":
+            JsonObject reply2 = new JsonObject().put("result", "okBiere");
+            res.reply(reply2);
+            break;
+          default:
+            // code block
+        }
+
+
+
+
+    });
+
+
 
   }
 
   private void accueilNouveauClient() {
     //ajoute le client a la map
-    vertx.sharedData().getAsyncMap("clientMap", res -> {
-      if (res.succeeded()) {
+    vertx.sharedData().getAsyncMap("clientMap", addAr -> {
+      if (addAr.succeeded()) {
         // Local-only async map
-        AsyncMap<Object, Object> map = res.result();
-        Client c1 = new Client();
-        map.put("1", Json.encode(c1), resPut -> {
+        AsyncMap<Object, Object> map = addAr.result();
+        double x = Math.random();
+        getVertx().sharedData().getLock("addMap", mar -> System.out.println(mar.result()));
+        Client c1 = new Client(++clientId);
+        map.put(x, Json.encode(c1), resPut -> {
           if (resPut.succeeded()) {
             // Successfully put the value
           } else {

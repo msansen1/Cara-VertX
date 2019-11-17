@@ -12,8 +12,8 @@ public class Client implements Serializable {
   private int clientStatus;
   private CommandeClient commandeClient;
 
-  public Client() {
-    this.id = 1;
+  public Client(int x) {
+    this.id = x;
     this.clientStatus = ClientStatus.CLPLACED;
     this.commandeClient = new CommandeClient();
   }
