@@ -8,7 +8,6 @@ public class RestaurantVerticle extends AbstractVerticle {
   @Override
   public void start() throws Exception {
     System.out.println("Start of Restaurant Verticle");
-    SharedData sharedData = vertx.sharedData();
 
     vertx.sharedData().getCounter(
         "nbPlacesRestaurant",
