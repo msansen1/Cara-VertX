@@ -3,40 +3,46 @@ package com.cara.vertx.domain;
 import com.cara.vertx.enums.ClientStatus;
 import com.cara.vertx.enums.CommandeStatus;
 import com.cara.vertx.messages.CommandeClient;
-import io.vertx.core.json.JsonObject;
 
 import java.io.Serializable;
 
 public class Client implements Serializable {
 
   private int id;
-  private int cs;
-  private int cc;
+  private int clientStatus;
+  private CommandeClient commandeClient;
 
   public Client() {
     this.id = 1;
-    this.cs = ClientStatus.CLPLACED;
-    this.cc = CommandeStatus.CMDORDERING;
+    this.clientStatus = ClientStatus.CLPLACED;
+    this.commandeClient = new CommandeClient();
   }
 
-  public Client(ClientStatus cs, CommandeClient cc) {
-    this.cs = ClientStatus.CLPLACED;
-    this.cc = CommandeStatus.CMDORDERING;
+  public Client(ClientStatus clientStatus, CommandeClient commandeStatus) {
+    this.clientStatus = ClientStatus.CLPLACED;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public int getClientStatus() {
-    return cs;
+    return clientStatus;
   }
 
-  public void setClientStatus(int cs) {
-    this.cs = cs;
+  public void setClientStatus(int clientStatus) {
+    this.clientStatus = clientStatus;
   }
 
-  public int getCommandeClient() {
-    return cc;
+  public CommandeClient getCommandeClient() {
+    return commandeClient;
   }
 
-  public void setCommandeClient(int cc) {
-    this.cc = cc;
+  public void setCommandeClient(CommandeClient commandeClient) {
+    this.commandeClient = commandeClient;
   }
 }

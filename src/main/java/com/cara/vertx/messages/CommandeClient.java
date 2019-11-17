@@ -1,5 +1,7 @@
 package com.cara.vertx.messages;
 
+import com.cara.vertx.enums.CommandeStatus;
+
 import java.io.Serializable;
 
 public class CommandeClient implements Serializable {
@@ -9,9 +11,9 @@ public class CommandeClient implements Serializable {
 	//private ActorRef client;
 	private int status;
 
-    /*public CommandeClient(ActorRef client) {
-        this.client = client;
-    }*/
+    public CommandeClient() {
+        this.status = CommandeStatus.CMDORDERING;
+    }
 
     public CommandeClient(String inWord, Integer inCount) {
 		plat = inWord;
