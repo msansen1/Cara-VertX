@@ -5,19 +5,42 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.shareddata.Counter;
-import io.vertx.core.shareddata.SharedData;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class RestaurantLauncher {
+
+  public static int restaurantSize;
+  public static int serveursNb;
+  public static int clientsNb;
+  public static int cuisiniersNb;
 
   public static void main(String[] args) throws InterruptedException {
     System.out.println("Start of RestaurantLauncher");
 
+    try (InputStream input = RestaurantLauncher.class.getClassLoader().getResourceAsStream("application.properties")) {
+
+      Properties prop = new Properties();
+
+      // load a properties file
+      prop.load(input);
+
+      // get the property value and print it out
+      restaurantSize= Integer.parseInt(prop.getProperty("restaurant.nbPlaces"));
+      serveursNb 	= Integer.parseInt(prop.getProperty("serveurs.nb"));
+      clientsNb 	= Integer.parseInt(prop.getProperty("clients.nb"));
+      cuisiniersNb = Integer.parseInt(prop.getProperty("cuisiniers.nb"));
+
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+
     final Vertx vertx = Vertx.vertx();
-    final DeploymentOptions serveurOptions = new DeploymentOptions().setInstances(3);
-    final DeploymentOptions cuisinierOptions = new DeploymentOptions().setInstances(2);
-    final DeploymentOptions ClientOptions = new DeploymentOptions().setInstances(10);
-    final DeploymentOptions PlacesOptions = new DeploymentOptions().setInstances(5);
+    final DeploymentOptions serveurOptions = new DeploymentOptions().setInstances(serveursNb);
+    final DeploymentOptions cuisinierOptions = new DeploymentOptions().setInstances(cuisiniersNb);
+    final DeploymentOptions ClientOptions = new DeploymentOptions().setInstances(clientsNb);
 
 
     final Handler<AsyncResult<String>> restaurantCompletionHandler = ar -> {
