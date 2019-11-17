@@ -19,38 +19,10 @@ public class RestaurantLauncher {
     final DeploymentOptions ClientOptions = new DeploymentOptions().setInstances(10);
     final DeploymentOptions PlacesOptions = new DeploymentOptions().setInstances(5);
 
-    SharedData sharedData = vertx.sharedData();
 
-    vertx
-        .sharedData()
-        .getCounter(
-          "nbPlacesRestaurant",
-          resultHandler -> {
-            final Counter counter = resultHandler.result();
-            counter.get(
-              handler -> {
-                long val = handler.result();
-                if (val == 0) {
-                  counter.addAndGet(
-                    10,
-                    hhh -> {
-                      System.out.println("nbPlacesRestaurant:" + hhh.result());
-                    });
-                } else {
 
-                }
-              });
-          });
 
-    Thread.sleep(1000);
-    sharedData.getCounter("nbPlacesRestaurant", res -> {
-      if (res.succeeded()) {
-        Counter counter = res.result();
-        System.out.println("nbPlacesRestaurant:" + counter);
-      } else {
-        // Something went wrong!
-      }
-    });
+
 
 
     final Handler<AsyncResult<String>> restaurantCompletionHandler = ar -> {
@@ -72,6 +44,17 @@ public class RestaurantLauncher {
 
     vertx.deployVerticle(RestaurantVerticle.class.getName(),restaurantCompletionHandler);
     vertx.deployVerticle(ServeurVerticle.class.getName(),serverCompletionHandler);
+
+    Thread.sleep(1000);
+
+    vertx.sharedData().getCounter("nbPlacesRestaurant", ar -> {
+      if (ar.succeeded()) {
+        Counter counter = ar.result();
+        counter.get(stats -> System.out.println("nb Places Restaurant " + stats.result()));
+      } else {
+        System.out.println(ar.cause());
+      }
+    });
 
     System.out.println("End of RestaurantLauncher");
 
