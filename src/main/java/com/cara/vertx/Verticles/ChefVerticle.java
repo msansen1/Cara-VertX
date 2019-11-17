@@ -12,8 +12,8 @@ public class ChefVerticle extends AbstractVerticle {
   public void start() throws Exception {
     System.out.println("Start of Chef Verticle");
     //Recevoir un message
-    final EventBus bus = vertx.eventBus();
-    final MessageConsumer<String> consumer = bus.consumer(chefAddress);
+    final EventBus eventbus = vertx.eventBus();
+    final MessageConsumer<String> consumer = eventbus.consumer(chefAddress);
       consumer.handler(message -> {
         System.out.println("[Chef] <- " + message.body());
       });

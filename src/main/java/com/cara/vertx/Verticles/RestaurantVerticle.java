@@ -19,7 +19,7 @@ public class RestaurantVerticle extends AbstractVerticle {
   public void start() throws Exception {
     System.out.println("Start of Restaurant Verticle");
 
-
+    //TODO recuperer la capacité du restaurant depuis le Launcher
     //On définit la capacité du restaurant dans un compteur
     vertx.sharedData().getCounter(
         "nbPlacesRestaurant",

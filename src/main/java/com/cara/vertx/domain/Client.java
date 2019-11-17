@@ -17,10 +17,10 @@ public class Client implements Serializable {
     this.clientStatus = ClientStatus.CLPLACED;
     this.commandeClient = new CommandeClient();
   }
-
+/*
   public Client(ClientStatus clientStatus, CommandeClient commandeStatus) {
     this.clientStatus = ClientStatus.CLPLACED;
-  }
+  }*/
 
   public int getId() {
     return id;

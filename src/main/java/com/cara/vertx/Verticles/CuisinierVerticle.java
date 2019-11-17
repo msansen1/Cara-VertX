@@ -12,8 +12,8 @@ public class CuisinierVerticle extends AbstractVerticle {
   public void start() throws Exception {
     System.out.println("Start of Cuisinier Verticle");
     //Recevoir un message
-    final EventBus bus = vertx.eventBus();
-    final MessageConsumer<String> consumer = bus.consumer(CuisinierAddress);
+    final EventBus eventBus = vertx.eventBus();
+    final MessageConsumer<String> consumer = eventBus.consumer(CuisinierAddress);
     consumer.handler(message -> {
       System.out.println("[Cuisinier] <- " + message.body());
     });
