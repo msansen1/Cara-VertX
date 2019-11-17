@@ -30,7 +30,7 @@ public class RestaurantLauncher {
     };
 
     final Handler<AsyncResult<String>> serverCompletionHandler = ar -> {
-      //si tout le personnel du restaurant est pret, on ouvre aux clients
+      //si tout le personnel du restaurant est prêt, on ouvre aux clients
       //Clients
       vertx.deployVerticle(ClientVerticle.class.getName(),ClientOptions);
     };
