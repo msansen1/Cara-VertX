@@ -2,6 +2,7 @@ package VertX.TP1;
 
 import VertX.TP1.Actors.ChefVerticle;
 import VertX.TP1.Actors.CuisinierVerticle;
+import VertX.TP1.Actors.RestaurantVerticle;
 import VertX.TP1.Actors.ServeurVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
@@ -12,13 +13,21 @@ public class ActorsLauncher {
     System.out.println("Start of Actors Launcher");
 
     final Vertx vertx = Vertx.vertx();
-    vertx.deployVerticle(ChefVerticle.class.getName());
-    vertx.deployVerticle(CuisinierVerticle.class.getName());
-    /**lancer plusieurs instances de serveurVerticle
-    final DeploymentOptions options = new DeploymentOptions()
-      .setInstances(5);
-     **/
-    vertx.deployVerticle(ServeurVerticle.class.getName());
+    vertx.deployVerticle(RestaurantVerticle.class.getName(), ar -> {
+      System.out.println("Restaurant Verticle Deployed");
+
+      //Chef
+      vertx.deployVerticle(ChefVerticle.class.getName());
+
+      //Serveur
+      final DeploymentOptions serveurOptions = new DeploymentOptions().setInstances(3);
+      vertx.deployVerticle(ServeurVerticle.class.getName(),serveurOptions);
+
+      //Cuisinier
+      final DeploymentOptions cuisinierOptions = new DeploymentOptions().setInstances(2);
+      vertx.deployVerticle(CuisinierVerticle.class.getName(),cuisinierOptions);
+
+    });
 
     System.out.println("End of Actors Launcher");
 
