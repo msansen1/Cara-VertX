@@ -1,4 +1,4 @@
-package VertX.TP1.Actors;
+package com.cara.vertx.Verticles;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;

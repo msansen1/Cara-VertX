@@ -1,4 +1,4 @@
-package VertX.TP1.Actors;
+package com.cara.vertx.Verticles;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
@@ -6,8 +6,8 @@ import io.vertx.core.eventbus.MessageConsumer;
 
 
 public class ChefVerticle extends AbstractVerticle {
-  final String chefAddress="Chef.address";
-  final String ServeurAddress="Serveur.address";
+  final String chefAddress="restaurant.chef";
+  final String ServeurAddress="restaurant.serveur";
   @Override
   public void start() throws Exception {
     System.out.println("Start of Chef Verticle");

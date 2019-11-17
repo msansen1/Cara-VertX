@@ -1,4 +1,4 @@
-package VertX.TP1.Actors;
+package com.cara.vertx.Verticles;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
@@ -6,7 +6,7 @@ import io.vertx.core.eventbus.EventBus;
 public class ServeurVerticle extends AbstractVerticle {
 
   final String message="[Serveur]:j'ai une commande";
-  final String chefAddress="Chef.address";
+  final String chefAddress="restaurant.chef";
   final String CuisinierAddress="Cuisinier.address";
 
   final int period = 3000;
