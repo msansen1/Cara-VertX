@@ -19,50 +19,6 @@ public class RestaurantVerticle extends AbstractVerticle {
   public void start() throws Exception {
     System.out.println("Start of Restaurant Verticle");
 
-    //TODO recuperer la capacité du restaurant depuis le Launcher
-    //On définit la capacité du restaurant dans un compteur
-    vertx.sharedData().getLocalCounter(
-        "nbPlacesRestaurant",
-        ar -> {
-          if (ar.succeeded()){
-            Counter counter = ar.result();
-            counter.addAndGet(10,opAr -> {
-              if(opAr.succeeded()){
-                System.out.println("[succeeded] NBRPLACES:"+opAr.result());
-              }else {
-                System.out.println(opAr.cause());
-              }
-            });
-          }else {
-            System.out.println(ar.cause());
-          }
-        });
-
-    vertx.sharedData().getLocalCounter(
-      "capacitéRestaurant",
-      ar2 -> {
-        if (ar2.succeeded()){
-          Counter counter = ar2.result();
-          counter.addAndGet(10,opAr -> {
-            if(opAr.succeeded()){
-              System.out.println("[succeeded] NBRPLACES:"+opAr.result());
-            }else {
-              System.out.println(opAr.cause());
-            }
-          });
-        }else {
-          System.out.println(ar2.cause());
-        }
-      });
-
-    vertx.sharedData().<Integer, String>getLocalAsyncMap("clientMap", res -> {
-      if (res.succeeded()) {
-        AsyncMap<Integer, String> map = res.result();
-      } else {
-        System.out.println(res.cause());
-      }
-    });
-
   }
 
   @Override

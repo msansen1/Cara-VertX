@@ -1,7 +1,10 @@
 package com.cara.vertx.Verticles;
 
+import com.cara.vertx.domain.Client;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 public class ClientVerticle extends AbstractVerticle {
@@ -9,8 +12,8 @@ public class ClientVerticle extends AbstractVerticle {
 
   final String serveurAddress ="restaurant.serveur";
 
-  //final int period = 3000;
-
+  final int period = 3000;
+  private int clientId=0;
   final static String clientMessageIntro = "[Client] -";
 
   @Override
@@ -18,23 +21,24 @@ public class ClientVerticle extends AbstractVerticle {
     System.out.println("Start of Client Verticle");
 
     final EventBus eventbus = vertx.eventBus();
-    eventbus.request(serveurAddress,"Une table?", reply -> {
-      if ( reply.succeeded()){
-        System.out.println( clientMessageIntro + " < " + reply.result().body() );
-        //JsonObject data = JsonObject.mapFrom(reply.result());
-        //System.out.println(data.encode());
-      }
-    });
 
-    eventbus.consumer("GreetingService", message -> {
-      JsonObject reply = new JsonObject().put("message", "Hello World!");
-      message.reply(reply);
-    });
 
-    /*
     vertx.setPeriodic(period, (l) -> {
-      eventbus.send(serveurAddress,"UpdateMe");
-    });*/
+      Client client = new Client(++clientId);
+      String address = "address";
+      JsonObject jsonToEncode = new JsonObject();
+      jsonToEncode.put("id", client.getId());
+      jsonToEncode.put("clientStatus", client.getClientStatus());
+      jsonToEncode.put("plat", client.getPlat());
+      jsonToEncode.put("commandeStatus", client.getCommandeStatus());
+      //Json.encode(client)
+      eventbus.request(serveurAddress, jsonToEncode, reply->{
+        if (reply.succeeded()){
+          JsonObject data = JsonObject.mapFrom(reply.result().body());
+          System.out.println(clientMessageIntro + data.encode());
+        }
+      });
+    });
 
 
   }

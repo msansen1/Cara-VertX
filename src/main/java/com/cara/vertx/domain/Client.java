@@ -2,7 +2,6 @@ package com.cara.vertx.domain;
 
 import com.cara.vertx.enums.ClientStatus;
 import com.cara.vertx.enums.CommandeStatus;
-import com.cara.vertx.messages.CommandeClient;
 
 import java.io.Serializable;
 
@@ -10,17 +9,24 @@ public class Client implements Serializable {
 
   private int id;
   private int clientStatus;
-  private CommandeClient commandeClient;
+  private String plat;
+  private int commandeStatus;
+
+  public Client() { }
 
   public Client(int x) {
     this.id = x;
-    this.clientStatus = ClientStatus.CLPLACED;
-    this.commandeClient = new CommandeClient();
+    this.clientStatus= ClientStatus.CLPLACED;
+    this.commandeStatus = CommandeStatus.CMDORDERING;
+    this.plat="";
   }
-/*
-  public Client(ClientStatus clientStatus, CommandeClient commandeStatus) {
-    this.clientStatus = ClientStatus.CLPLACED;
-  }*/
+
+  public Client(int id, int clientStatus, String plat, int commandeStatus) {
+    this.id = id;
+    this.clientStatus = clientStatus;
+    this.plat = plat;
+    this.commandeStatus = commandeStatus;
+  }
 
   public int getId() {
     return id;
@@ -38,11 +44,29 @@ public class Client implements Serializable {
     this.clientStatus = clientStatus;
   }
 
-  public CommandeClient getCommandeClient() {
-    return commandeClient;
+  public String getPlat() {
+    return plat;
   }
 
-  public void setCommandeClient(CommandeClient commandeClient) {
-    this.commandeClient = commandeClient;
+  public void setPlat(String plat) {
+    this.plat = plat;
+  }
+
+  public int getCommandeStatus() {
+    return commandeStatus;
+  }
+
+  public void setCommandeStatus(int commandeStatus) {
+    this.commandeStatus = commandeStatus;
+  }
+
+  @Override
+  public String toString() {
+    return "Client{" +
+      "id=" + id +
+      ", clientStatus=" + clientStatus +
+      ", plat='" + plat + '\'' +
+      ", commandeStatus=" + commandeStatus +
+      '}';
   }
 }
