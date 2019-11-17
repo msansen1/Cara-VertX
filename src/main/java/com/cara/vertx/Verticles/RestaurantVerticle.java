@@ -29,9 +29,7 @@ public class RestaurantVerticle extends AbstractVerticle {
           }
         });
 
-    SharedData sharedData = vertx.sharedData();
-
-    sharedData.<Integer, String>getAsyncMap("clientMap", res -> {
+    vertx.sharedData().<Integer, String>getAsyncMap("clientMap", res -> {
       if (res.succeeded()) {
         AsyncMap<Integer, String> map = res.result();
       } else {
