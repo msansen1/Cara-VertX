@@ -20,11 +20,6 @@ public class RestaurantLauncher {
     final DeploymentOptions PlacesOptions = new DeploymentOptions().setInstances(5);
 
 
-
-
-
-
-
     final Handler<AsyncResult<String>> restaurantCompletionHandler = ar -> {
       System.out.println("Restaurant Verticle Deployed");
       //Chef
@@ -47,14 +42,7 @@ public class RestaurantLauncher {
 
     Thread.sleep(1000);
 
-    vertx.sharedData().getCounter("nbPlacesRestaurant", ar -> {
-      if (ar.succeeded()) {
-        Counter counter = ar.result();
-        counter.get(stats -> System.out.println("nb Places Restaurant " + stats.result()));
-      } else {
-        System.out.println(ar.cause());
-      }
-    });
+
 
     System.out.println("End of RestaurantLauncher");
 

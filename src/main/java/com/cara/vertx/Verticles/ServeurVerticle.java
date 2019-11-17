@@ -1,7 +1,10 @@
 package com.cara.vertx.Verticles;
 
+import com.cara.vertx.domain.Client;
+import com.cara.vertx.enums.ClientStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.shareddata.AsyncMap;
 
 public class ServeurVerticle extends AbstractVerticle {
 
@@ -16,7 +19,29 @@ public class ServeurVerticle extends AbstractVerticle {
     System.out.println("Start of Serveur Verticle");
     final EventBus bus = vertx.eventBus();
     bus.send(chefAddress,message);
-    vertx.setPeriodic(period, (l) -> bus.send(CuisinierAddress, message));
+    vertx.setPeriodic(period, (l) -> {
+      bus.send(CuisinierAddress, message);
+
+      vertx.sharedData().getAsyncMap("clientMap", res -> {
+        if (res.succeeded()) {
+          // Local-only async map
+          AsyncMap<Object, Object> map = res.result();
+          Client c1 = new Client();
+          map.put("1", c1.toString(), resPut -> {
+            if (resPut.succeeded()) {
+              // Successfully put the value
+            } else {
+              // Something went wrong!
+            }
+          });
+        } else {
+          // Something went wrong!
+        }
+      });
+      System.out.println("client pushed");
+
+
+    });
   }
 
   @Override
