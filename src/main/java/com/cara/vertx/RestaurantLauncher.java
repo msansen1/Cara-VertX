@@ -5,6 +5,8 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.shareddata.Counter;
+import io.vertx.core.shareddata.SharedData;
 
 public class RestaurantLauncher {
 
@@ -16,6 +18,39 @@ public class RestaurantLauncher {
     final DeploymentOptions cuisinierOptions = new DeploymentOptions().setInstances(2);
     final DeploymentOptions ClientOptions = new DeploymentOptions().setInstances(10);
     final DeploymentOptions PlacesOptions = new DeploymentOptions().setInstances(5);
+
+    SharedData sharedData = vertx.sharedData();
+
+    vertx
+        .sharedData()
+        .getCounter(
+          "nbPlacesRestaurant",
+          resultHandler -> {
+            final Counter counter = resultHandler.result();
+            counter.get(
+              handler -> {
+                long val = handler.result();
+                if (val == 0) {
+                  counter.addAndGet(
+                    10,
+                    hhh -> {
+                      System.out.println("nbPlacesRestaurant:" + hhh.result());
+                    });
+                } else {
+
+                }
+              });
+          });
+
+    Thread.sleep(1000);
+    sharedData.getCounter("nbPlacesRestaurant", res -> {
+      if (res.succeeded()) {
+        Counter counter = res.result();
+        System.out.println("nbPlacesRestaurant:" + counter);
+      } else {
+        // Something went wrong!
+      }
+    });
 
 
     final Handler<AsyncResult<String>> restaurantCompletionHandler = ar -> {
