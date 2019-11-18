@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 public class ServeurVerticle extends AbstractVerticle {
 
   final String message="[Serveur]:j'ai une commande";
-  final String chefAddress="restaurant.chef";
   final String serveurAddress="restaurant.serveur";
   final String CuisinierAddress="restaurant.cuisinier";
   final String ClientAddress="restaurant.client";
@@ -28,14 +27,14 @@ public class ServeurVerticle extends AbstractVerticle {
   public void start() throws Exception {
     System.out.println(messageIntro + "Start of Serveur Verticle");
 
-    /**Q1: Instancier l'eventBus
+    /**Q2: Instancier l'eventBus
      * cette doc pourrait vous être utile https://www.mednikov.net/vertx-eventbus/
      */
 
     /*final EventBus eventBus = vertx.eventBus();*/
 
 
-    /**Q2 Mettre en place la reception des messages envoyés par le Restaurant (typés Client envoyés au format Json)
+    /**Q3 Mettre en place la reception des messages envoyés par le Restaurant (typés Client envoyés au format Json)
      *
      */
 
