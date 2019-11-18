@@ -6,17 +6,26 @@ import io.vertx.core.eventbus.MessageConsumer;
 
 public class CuisinierVerticle extends AbstractVerticle {
 
-  final String CuisinierAddress="Cuisinier.address";
+  final String serveurAddress="restaurant.serveur";
+
+  final static String messageIntro = "[Cuisinier] - ";
 
   @Override
   public void start() throws Exception {
-    System.out.println("Start of Cuisinier Verticle");
+    System.out.println(messageIntro + "Start of Cuisinier Verticle");
+
+    /** Q2 Receptionner la commande d'un client
+     *
+     */
+    /*
     //Recevoir un message
     final EventBus eventBus = vertx.eventBus();
     final MessageConsumer<String> consumer = eventBus.consumer(CuisinierAddress);
     consumer.handler(message -> {
       System.out.println("[Cuisinier] <- " + message.body());
     });
+
+     */
   }
 
   @Override

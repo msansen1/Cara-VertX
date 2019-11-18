@@ -18,8 +18,19 @@ import java.util.stream.Stream;
 
 public class RestaurantVerticle extends AbstractVerticle {
 
+  /**Le Verticle Restaurant simule l'activité de clients en envoyant ponctuellement des Objets Client a destination des serveurs qui doivent se charger de les accueillir et de les servir
+   * Il dispose aussi de la carte du restaurant pour permettre au client de passer sa commande
+   */
+
   //La carte du restaurant
-  public static ArrayList<String> menu = (ArrayList<String>) Stream.of("La carbonade flamande", "Welsh", "Le chicon-gratin", "Joues de porc au maroilles", "Flamiche au maroilles", "Plat du Jour", "Tajine", "Couscous Royal").collect(Collectors.toList());
+  public static ArrayList<String> menu = (ArrayList<String>) Stream.of("La carbonade flamande",
+                                                                        "Welsh",
+                                                                        "Le chicon-gratin",
+                                                                        "Joues de porc au maroilles",
+                                                                        "Flamiche au maroilles",
+                                                                        "Plat du Jour", "Tajine",
+                                                                        "Couscous Royal")
+                                                                        .collect(Collectors.toList());
 
   final String serveurAddress ="restaurant.serveur";
   final String clientAddress ="restaurant.client";
@@ -30,48 +41,39 @@ public class RestaurantVerticle extends AbstractVerticle {
   @Override
   public void start() throws Exception {
     System.out.println("Start of Restaurant Verticle");
+
     final EventBus eventbus = vertx.eventBus();
 
     vertx.setPeriodic(period, (l) -> {
+      //On crée un Objet Client pour simuler l'entrée d'un client
       Client client = new Client(++clientId);
-      String address = "address";
+      //On adresse un message vers les Verticles serveurAddress au format JSON
       JsonObject jsonToEncode = ClientObjectToJson(client);
-      //Json.encode(client)
-      eventbus.request(serveurAddress, jsonToEncode, reply->{
-        if (reply.succeeded()){
-          JsonObject jsonObject = JsonObject.mapFrom(reply.result().body());
-          Client c = jsonObject.mapTo(Client.class);
-          System.out.println(clientMessageIntro + jsonObject.encode());
-          //construire le plat a commander
-          //on recupere l'objet client recu'
-          c.setPlat(getRandomElement(menu));
-          c.setClientStatus(ClientStatus.CLORDERPASSED);
-          c.setCommandeStatus(CommandeStatus.CMDORDERED);
-          eventbus.request(serveurAddress, ClientObjectToJson(c), replyAr->{
-            if (replyAr.succeeded()) {
-              JsonObject data2 = JsonObject.mapFrom(reply.result().body());
-              System.out.println(clientMessageIntro + data2.encode());
-            }
-          });
+      eventbus.send(serveurAddress, jsonToEncode, ar->{
+        if (ar.succeeded()){
+          System.out.println("send ok");
+        }
+        else {
+          System.out.println("Echec de l'envoi à : "+serveurAddress);
         }
       });
     });
-
-    /*
-    final MessageConsumer<String> consumer = eventbus.consumer(clientAddress);
-    consumer.handler(message -> {
-      System.out.println("[Chef] <- " + message.body());
-    });*/
   }
 
-  // Function select an element base on index
-  // and return an element
+  /** Function qui retourne un élément aléatoire d'une liste
+   * @param list
+   * @return String
+   */
   public String getRandomElement(List<String> list)
   {
     Random rand = new Random();
     return list.get(rand.nextInt(list.size()));
   }
 
+  /**ClientObjectToJson convertit un Objet Client en Json pour qu'il puisse être envoyé sur l'eventBus
+   * @param client
+   * @return JsonObject
+   */
   private JsonObject ClientObjectToJson(Client client) {
     JsonObject jsonToEncode = new JsonObject();
     jsonToEncode.put("id", client.getId());

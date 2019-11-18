@@ -2,11 +2,14 @@
 
 image:https://img.shields.io/badge/vert.x-3.8.3-purple.svg[link="https://vertx.io"]
 
-This application was generated using http://start.vertx.io
+TP Cara Vertx
 
-== Building
+Contexte:
+Pour simuler l'arrivée de Clients, Restaurant Vericle adresse des messages Json au Serveur contenant un client et ses états
 
-To launch your tests:
+== Question 1.
+
+Démarrer
 ```
 ./mvn clean test
 ```

@@ -1,14 +1,6 @@
 package com.cara.vertx.Verticles;
 
-import com.cara.vertx.domain.Client;
-import com.cara.vertx.enums.ClientStatus;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.shareddata.AsyncMap;
-import io.vertx.core.shareddata.Counter;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -24,7 +16,7 @@ public class ServeurVerticle extends AbstractVerticle {
 
   final int period = 3000;
 
-  final static String serveurMessageIntro = "[Serveur] - ";
+  final static String messageIntro = "[Serveur] - ";
 
   //La carte du restaurant
   public static ArrayList<String> menu = (ArrayList<String>) Stream.of("La carbonade flamande", "Welsh", "Le chicon-gratin", "Joues de porc au maroilles", "Flamiche au maroilles", "Plat du Jour", "Tajine", "Couscous Royal").collect(Collectors.toList());
@@ -34,10 +26,20 @@ public class ServeurVerticle extends AbstractVerticle {
 
   @Override
   public void start() throws Exception {
-    System.out.println("Start of Serveur Verticle");
-    final EventBus eventBus = vertx.eventBus();
+    System.out.println(messageIntro + "Start of Serveur Verticle");
 
-    eventBus.consumer(serveurAddress, res -> {
+    /**Q1: Instancier l'eventBus
+     * cette doc pourrait vous être utile https://www.mednikov.net/vertx-eventbus/
+     */
+
+    /*final EventBus eventBus = vertx.eventBus();*/
+
+
+    /**Q2 Mettre en place la reception des messages envoyés par le Restaurant (typés Client envoyés au format Json)
+     *
+     */
+
+    /*eventBus.consumer(serveurAddress, res -> {
       //receive a message
       JsonObject jsonObject = JsonObject.mapFrom(res.body());
       Client client = jsonObject.mapTo(Client.class);
@@ -48,7 +50,7 @@ public class ServeurVerticle extends AbstractVerticle {
       //System.out.println(Json.encode(menu));
 
 
-    });
+    });*/
   }
 
   @Override

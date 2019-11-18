@@ -29,39 +29,49 @@ public class RestaurantLauncher {
 
       // get the property value and print it out
       restaurantSize= Integer.parseInt(prop.getProperty("restaurant.nbPlaces"));
-      serveursNb 	= Integer.parseInt(prop.getProperty("serveurs.nb"));
-      clientsNb 	= Integer.parseInt(prop.getProperty("clients.nb"));
-      cuisiniersNb = Integer.parseInt(prop.getProperty("cuisiniers.nb"));
+      serveursNb 	= Integer.parseInt(prop.getProperty("restaurant.serveurs.nb"));
+      clientsNb 	= Integer.parseInt(prop.getProperty("restaurant.clients.nb"));
+      cuisiniersNb = Integer.parseInt(prop.getProperty("restaurant.cuisiniers.nb"));
 
     } catch (IOException ex) {
       ex.printStackTrace();
     }
 
     final Vertx vertx = Vertx.vertx();
+
+
+    /**Question 1
+     * Faire en sorte qu'il y ait plus d'une instance de Serveur et de Cuisinier.
+     * Configurer le deploiement pour démarrer les serveurs au nombre de serveursNb(application.properties)
+     * Configurer le deploiement pour démarrer les cuisiniers au nombre de cuisiniersNb(application.properties)
+     */
+
+    //Configuration d'options de déploiement
     final DeploymentOptions serveurOptions = new DeploymentOptions().setInstances(serveursNb);
     final DeploymentOptions cuisinierOptions = new DeploymentOptions().setInstances(cuisiniersNb);
-    final DeploymentOptions ClientOptions = new DeploymentOptions().setInstances(clientsNb);
-
 
     final Handler<AsyncResult<String>> restaurantCompletionHandler = ar -> {
       System.out.println("Restaurant Verticle Deployed");
-      //Chef
-      vertx.deployVerticle(ChefVerticle.class.getName());
+      //Cuisinier
+      vertx.deployVerticle(CuisinierVerticle.class.getName());
+      //Serveur
+      vertx.deployVerticle(ServeurVerticle.class.getName());
+
+    };
+
+    /*
+    //passage des DeploymentOptions au deployVerticle
+      final Handler<AsyncResult<String>> restaurantCompletionHandler = ar -> {
+
+      System.out.println("Restaurant Verticle Deployed");
       //Cuisinier
       vertx.deployVerticle(CuisinierVerticle.class.getName(),cuisinierOptions);
       //Serveur
       vertx.deployVerticle(ServeurVerticle.class.getName(),serveurOptions);
 
-    };
-
-    final Handler<AsyncResult<String>> serverCompletionHandler = ar -> {
-      //si tout le personnel du restaurant est prêt, on ouvre aux clients
-      //Clients
-      //vertx.deployVerticle(ClientVerticle.class.getName(),ClientOptions);
-    };
+    };*/
 
     vertx.deployVerticle(RestaurantVerticle.class.getName(),restaurantCompletionHandler);
-    vertx.deployVerticle(ServeurVerticle.class.getName(),serverCompletionHandler);
 
     Thread.sleep(1000);
 
