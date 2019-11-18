@@ -14,13 +14,10 @@ Echec de l'envoi à : restaurant.serveur
 ```
 
 == Question 1.RestaurantLauncher
-
 Modifier le code pour démarrer plusiers occurences de  Serveurs Verticles et Cuisinier verticles en utilisant les variables serveursNb et cuisiniersNb
 
 == Question 2.ServeurVerticle
-
 Instancier l'eventBus pour receptionner les messages envoyés par RestaurantVerticle
-
 
 == Question 3.ServeurVerticle
 Mettre en place la reception des messages envoyés par le Restaurant (typés Client envoyés au format Json)
