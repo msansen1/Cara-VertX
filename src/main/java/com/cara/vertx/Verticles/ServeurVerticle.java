@@ -42,8 +42,8 @@ public class ServeurVerticle extends AbstractVerticle {
       JsonObject jsonObject = JsonObject.mapFrom(res.body());
       Client client = jsonObject.mapTo(Client.class);
       System.out.println(client.toString());
-      JsonObject reply = new JsonObject().put("result", "ok");
-      res.reply(reply);
+      //JsonObject reply = new JsonObject().put("result", "ok");
+      res.reply(jsonObject);
 
       //System.out.println(Json.encode(menu));
 

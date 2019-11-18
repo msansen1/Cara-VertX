@@ -57,7 +57,7 @@ public class RestaurantLauncher {
     final Handler<AsyncResult<String>> serverCompletionHandler = ar -> {
       //si tout le personnel du restaurant est prêt, on ouvre aux clients
       //Clients
-      vertx.deployVerticle(ClientVerticle.class.getName(),ClientOptions);
+      //vertx.deployVerticle(ClientVerticle.class.getName(),ClientOptions);
     };
 
     vertx.deployVerticle(RestaurantVerticle.class.getName(),restaurantCompletionHandler);
