@@ -50,6 +50,11 @@ public class ServeurVerticle extends AbstractVerticle {
 
 
     });*/
+
+    /**Q4 & Q5 Comptabiliser les clients du restaurant dans un sharedData
+     * https://vertx.io/docs/vertx-core/java/#_asynchronous_counters
+     *
+     */
   }
 
   @Override

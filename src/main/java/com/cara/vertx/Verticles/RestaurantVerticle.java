@@ -23,14 +23,16 @@ public class RestaurantVerticle extends AbstractVerticle {
    */
 
   //La carte du restaurant
-  public static ArrayList<String> menu = (ArrayList<String>) Stream.of("La carbonade flamande",
-                                                                        "Welsh",
-                                                                        "Le chicon-gratin",
-                                                                        "Joues de porc au maroilles",
-                                                                        "Flamiche au maroilles",
-                                                                        "Plat du Jour", "Tajine",
-                                                                        "Couscous Royal")
-                                                                        .collect(Collectors.toList());
+  public static ArrayList<String> menu = (ArrayList<String>) Stream.of(
+    "La carbonade flamande",
+    "Welsh",
+    "Le chicon-gratin",
+    "Joues de porc au maroilles",
+    "Flamiche au maroilles",
+    "Plat du Jour",
+    "Tajine",
+    "Couscous Royal")
+    .collect(Collectors.toList());
 
   final String serveurAddress ="restaurant.serveur";
   final String clientAddress ="restaurant.client";
