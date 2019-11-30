@@ -4,6 +4,7 @@ import com.cara.vertx.domain.Client;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.shareddata.Counter;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -49,7 +50,23 @@ public class ServeurVerticle extends AbstractVerticle {
       //JsonObject reply = new JsonObject().put("result", "ok");
       res.reply(jsonObject);
 
-      //System.out.println(Json.encode(menu));
+
+      long add = 1;
+      vertx
+        .sharedData()
+        .getCounter(
+          "nbPlacesRestaurant",
+          resultHandler -> {
+            final Counter counter = resultHandler.result();
+            counter.addAndGet(
+              add,
+              hhh -> {
+                System.out.println("Nombre de Clients dans le Restaurant:" + hhh.result());
+              });
+          });
+
+
+            //System.out.println(Json.encode(menu));
 
 
     });
