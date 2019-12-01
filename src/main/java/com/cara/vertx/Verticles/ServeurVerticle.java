@@ -55,7 +55,6 @@ public class ServeurVerticle extends AbstractVerticle {
       Client client = jsonObject.mapTo(Client.class);
       System.out.println("[Serveur] <- " + res.body());
 
-      //Vers -> Cuisinier
       //modifier status client to waiting
       client.setClientStatus(ClientStatus.CLWAITING);
       client.setCommandeStatus(CommandeStatus.CMDORDERED);
@@ -63,7 +62,7 @@ public class ServeurVerticle extends AbstractVerticle {
 
       JsonObject jsonToEncode = ClientObjectToJson(client);
 
-      //envoie vers cuisinier
+      //Vers -> Cuisinier
       eventBus.send(CuisinierAddress,jsonToEncode);
 
       long add = 1;
@@ -86,7 +85,7 @@ public class ServeurVerticle extends AbstractVerticle {
     eventBus.consumer(serveurAddress,req->{
       if (!req.headers().isEmpty()) {
         if (req.headers().get("Sender").equals("Cuisinier")) {
-          System.out.println("[SERVEUR] <-" + req.body());
+          System.out.println("[Serveur] <-" + req.body());
 
           //receive a message
           JsonObject jsonObject = JsonObject.mapFrom(req.body());
@@ -97,7 +96,7 @@ public class ServeurVerticle extends AbstractVerticle {
           client.setCommandeStatus(CommandeStatus.CMDSERVED);
 
           JsonObject jsonToEncode = ClientObjectToJson(client);
-          //envoie vers Client(Restaurant)
+          //Vers -> Client
           eventBus.send(ClientAddress,jsonToEncode);
 
         }

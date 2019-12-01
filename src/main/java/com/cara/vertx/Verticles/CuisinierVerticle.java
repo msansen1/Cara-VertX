@@ -37,8 +37,10 @@ public class CuisinierVerticle extends AbstractVerticle {
       client.setClientStatus(ClientStatus.CLWAITING);
       client.setCommandeStatus(CommandeStatus.CMDCOOKED);
       JsonObject jsonToEncode = ClientObjectToJson(client);
+      //Definir le head dans le message envoyé
       DeliveryOptions options = new DeliveryOptions();
       options.addHeader("Sender", "Cuisinier");
+      //Vers -> Serveur
       eventBus.send(serveurAddress,jsonToEncode,options);
     });
 
