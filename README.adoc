@@ -2,6 +2,9 @@
 
 image:https://img.shields.io/badge/vert.x-3.8.3-purple.svg[link="https://vertx.io"]
 
+Lien vers la présentation
+https://docs.google.com/presentation/d/1JIeAeLUx5JR9QlSzB_3RGtrn4n02TO_ZhNHJRMfyEWQ/edit?usp=sharing
+
 TP Cara Vertx
 
 Contexte:
