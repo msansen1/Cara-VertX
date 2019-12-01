@@ -13,6 +13,11 @@ ce temps passé bloque l'eventloop et pénalise l'application globale.
 Implementer un worker_verticle
 
 
+== Question 2.
+Lancer le jar en mode high availability
+-mvn clean install
+
+
 == Help
 * https://vertx.io/docs/vertx-core/java/#worker_verticles[Worker_Verticle]
 * https://blog.invivoo.com/vert-x-basics-concurrence-et-scalabilite-avec-les-verticles/[Vert.x Verticles]
