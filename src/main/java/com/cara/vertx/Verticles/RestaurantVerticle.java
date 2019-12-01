@@ -60,13 +60,19 @@ public class RestaurantVerticle extends AbstractVerticle {
         }
       });
     });
+
+    //recevoir la reponse de Serveur
+    eventbus.consumer(clientAddress,res->{
+      System.out.println("[Client] <- "+ res.body());
+    });
   }
+
 
   /** Function qui retourne un élément aléatoire d'une liste
    * @param list
    * @return String
    */
-  public String getRandomElement(List<String> list)
+  public static String getRandomElement(List<String> list)
   {
     Random rand = new Random();
     return list.get(rand.nextInt(list.size()));
@@ -76,7 +82,7 @@ public class RestaurantVerticle extends AbstractVerticle {
    * @param client
    * @return JsonObject
    */
-  private JsonObject ClientObjectToJson(Client client) {
+  public static JsonObject ClientObjectToJson(Client client) {
     JsonObject jsonToEncode = new JsonObject();
     jsonToEncode.put("id", client.getId());
     jsonToEncode.put("clientStatus", client.getClientStatus());
