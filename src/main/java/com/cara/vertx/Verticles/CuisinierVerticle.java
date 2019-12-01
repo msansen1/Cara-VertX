@@ -30,7 +30,8 @@ public class CuisinierVerticle extends AbstractVerticle {
     final EventBus eventBus = vertx.eventBus();
     final MessageConsumer<JsonObject> consumer = eventBus.consumer(CuisinierAddress);
     consumer.handler(message -> {
-      System.out.println("[Cuisinier] <- " + message.body());
+      System.out.println(message.headers().get("Sender")+" to "+message.headers().get("Receiver"));
+      System.out.println(": [Cuisinier] Reception d'une commande <- " + message.body());
       JsonObject jsonObject = JsonObject.mapFrom(message.body());
       Client client = jsonObject.mapTo(Client.class);
       //modifier status client to waiting
@@ -40,6 +41,7 @@ public class CuisinierVerticle extends AbstractVerticle {
       //Definir le head dans le message envoyé
       DeliveryOptions options = new DeliveryOptions();
       options.addHeader("Sender", "Cuisinier");
+      options.addHeader("Receiver", "Serveur");
       //Vers -> Serveur
       eventBus.send(serveurAddress,jsonToEncode,options);
     });

@@ -4,6 +4,7 @@ import com.cara.vertx.domain.Client;
 import com.cara.vertx.enums.ClientStatus;
 import com.cara.vertx.enums.CommandeStatus;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Counter;
@@ -37,10 +38,6 @@ public class ServeurVerticle extends AbstractVerticle {
   public void start() throws Exception {
     System.out.println(messageIntro + "Start of Serveur Verticle");
 
-    /**Q2: Instancier l'eventBus
-     * cette doc pourrait vous être utile https://www.mednikov.net/vertx-eventbus/
-     */
-
     final EventBus eventBus = vertx.eventBus();
 
 
@@ -53,7 +50,7 @@ public class ServeurVerticle extends AbstractVerticle {
       //receive a message
       JsonObject jsonObject = JsonObject.mapFrom(res.body());
       Client client = jsonObject.mapTo(Client.class);
-      System.out.println("[Serveur] <- " + res.body());
+      System.out.println("[Serveur] consumer1 <- " + res.body());
 
       //modifier status client to waiting
       client.setClientStatus(ClientStatus.CLWAITING);
@@ -63,7 +60,11 @@ public class ServeurVerticle extends AbstractVerticle {
       JsonObject jsonToEncode = ClientObjectToJson(client);
 
       //Vers -> Cuisinier
-      eventBus.send(CuisinierAddress,jsonToEncode);
+      //Definir le head dans le message envoyé
+      DeliveryOptions options = new DeliveryOptions();
+      options.addHeader("Sender", "Serveur");
+      options.addHeader("Receiver", "Cuisinier");
+      eventBus.send(CuisinierAddress,jsonToEncode, options);
 
       long add = 1;
       vertx
@@ -84,8 +85,10 @@ public class ServeurVerticle extends AbstractVerticle {
     //Recevoir la reponse de cuisinier
     eventBus.consumer(serveurAddress,req->{
       if (!req.headers().isEmpty()) {
+        System.out.println(req.headers().get("Sender")+" to "+req.headers().get("Receiver"));
+
         if (req.headers().get("Sender").equals("Cuisinier")) {
-          System.out.println("[Serveur] <-" + req.body());
+          System.out.println("[Serveur] consumer2 <-" + req.body());
 
           //receive a message
           JsonObject jsonObject = JsonObject.mapFrom(req.body());
@@ -97,7 +100,11 @@ public class ServeurVerticle extends AbstractVerticle {
 
           JsonObject jsonToEncode = ClientObjectToJson(client);
           //Vers -> Client
-          eventBus.send(ClientAddress,jsonToEncode);
+          //Definir le head dans le message envoyé
+          DeliveryOptions options = new DeliveryOptions();
+          options.addHeader("Sender", "Serveur");
+          options.addHeader("Receiver", "Client");
+          eventBus.send(ClientAddress,jsonToEncode, options);
 
         }
       }
