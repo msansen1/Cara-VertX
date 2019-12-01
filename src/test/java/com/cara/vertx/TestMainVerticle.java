@@ -1,4 +1,4 @@
-package VertX.TP1;
+package com.cara.vertx;
 
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
