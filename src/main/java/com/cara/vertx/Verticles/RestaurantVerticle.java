@@ -55,8 +55,8 @@ public class RestaurantVerticle extends AbstractVerticle {
       JsonObject jsonToEncode = ClientObjectToJson(client);
       //Definir le head dans le message envoyé
       DeliveryOptions options = utils.getDeliveryOptions("Restaurant", "Serveur");
-      eventbus.request(serveurAddress, jsonToEncode, options,  ar->{
-        if (ar.succeeded()){
+      eventbus.request(serveurAddress, jsonToEncode, options,  reply->{
+        if (reply.succeeded()){
           System.out.println("[Restaurant] Client pris en charge");
         }
         else {

@@ -35,6 +35,30 @@ public class CuisinierVerticle extends AbstractVerticle {
       System.out.println(": [Cuisinier] Reception d'une commande <- " + message.body());
       JsonObject jsonObject = JsonObject.mapFrom(message.body());
       Client client = jsonObject.mapTo(Client.class);
+
+      //geometrie variable selon plat a cuisiner
+      int duree=0;
+      switch(client.getPlat()) {
+        case "Plat du Jour":
+        case "Le chicon-gratin":
+        case "Tajine":
+        case "Joues de porc au maroilles":
+          duree = 5000;
+          break;
+        case "Flamiche au maroilles":
+          duree = 1500;
+          break;
+        default:
+          duree = 1000;
+          break;
+      }
+
+
+      try {
+        Thread.sleep(duree);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
       //modifier status client to waiting
       //client.setClientStatus(ClientStatus.CLWAITING);
       client.setCommandeStatus(CommandeStatus.CMDCOOKED);

@@ -47,72 +47,64 @@ public class ServeurVerticle extends AbstractVerticle {
      *
      */
 
-    eventBus.consumer(serveurAddress, res -> {
-
-      //receive a message
-      JsonObject jsonObject = JsonObject.mapFrom(res.body());
-      Client client = jsonObject.mapTo(Client.class);
-      System.out.println("[Serveur] consumer1 <- " + res.body());
-
-      //modifier status client to waiting
-      client.setClientStatus(ClientStatus.CLWAITING);
-      client.setCommandeStatus(CommandeStatus.CMDORDERED);
-      client.setPlat(getRandomElement(menu));
-
-      JsonObject jsonToEncode = ClientObjectToJson(client);
-
-      //Vers -> Cuisinier
-      //Definir le head dans le message envoyé
-      DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Cuisinier");
-
-      eventBus.send(CuisinierAddress,jsonToEncode, options);
-
-      long add = 1;
-      vertx
-        .sharedData()
-        .getCounter(
-          "nbPlacesRestaurant",
-          resultHandler -> {
-            final Counter counter = resultHandler.result();
-            counter.addAndGet(
-              add,
-              hhh -> {
-                System.out.println("Nombre de Clients dans le Restaurant:" + hhh.result());
-              });
-          });
-      //System.out.println(Json.encode(menu));
-    });
-
     //Recevoir la reponse de cuisinier
     eventBus.consumer(serveurAddress,req->{
       if (!req.headers().isEmpty()) {
+
+        //receive a message
+        JsonObject jsonObject = JsonObject.mapFrom(req.body());
+        Client client = jsonObject.mapTo(Client.class);
+        JsonObject jsonToEncode = ClientObjectToJson(client);
+
         utils.logFromTo(req);
+        switch(req.headers().get("Sender")) {
 
-        if (req.headers().get("Sender").equals("Cuisinier")) {
-          System.out.println("[Serveur] consumer2 <-" + req.body());
+          case "Cuisinier":
+            //modifier status client to waiting
+            client.setClientStatus(ClientStatus.CLORDERPASSED);
+            client.setCommandeStatus(CommandeStatus.CMDSERVED);
 
-          //receive a message
-          JsonObject jsonObject = JsonObject.mapFrom(req.body());
-          Client client = jsonObject.mapTo(Client.class);
+            jsonToEncode = ClientObjectToJson(client);
+            //Vers -> Client
+            //Definir le head dans le message envoyé
+            DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Client");
+            eventBus.send(ClientAddress,jsonToEncode, options);
+            break;
 
-          //modifier status client to waiting
-          client.setClientStatus(ClientStatus.CLORDERPASSED);
-          client.setCommandeStatus(CommandeStatus.CMDSERVED);
+          case "Restaurant":
 
-          JsonObject jsonToEncode = ClientObjectToJson(client);
-          //Vers -> Client
-          //Definir le head dans le message envoyé
-          DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Client");
-          eventBus.send(ClientAddress,jsonToEncode, options);
+            //modifier status client to waiting
+            client.setClientStatus(ClientStatus.CLWAITING);
+            client.setCommandeStatus(CommandeStatus.CMDORDERED);
+            client.setPlat(getRandomElement(menu));
 
+            jsonToEncode = ClientObjectToJson(client);
+
+            //Vers -> Cuisinier
+            //Definir le head dans le message envoyé
+            DeliveryOptions options2 = utils.getDeliveryOptions("Serveur", "Cuisinier");
+
+            eventBus.send(CuisinierAddress,jsonToEncode, options2);
+
+            long add = 1;
+            vertx
+              .sharedData()
+              .getCounter(
+                "nbPlacesRestaurant",
+                resultHandler -> {
+                  final Counter counter = resultHandler.result();
+                  counter.addAndGet(
+                    add,
+                    hhh -> {
+                      //System.out.print("Nombre de Clients dans le Restaurant:" + hhh.result());
+                    });
+                });
+            break;
+          default:
+            System.out.println("WARNING: IN DEFAULT, CASE ERROR");
         }
       }
     });
-
-    /**Q4 & Q5 Comptabiliser les clients du restaurant dans un sharedData
-     * https://vertx.io/docs/vertx-core/java/#_asynchronous_counters
-     *
-     */
   }
 
   @Override

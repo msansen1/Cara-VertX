@@ -48,7 +48,9 @@ public class RestaurantLauncher {
 
     //Configuration d'options de déploiement
     final DeploymentOptions serveurOptions = new DeploymentOptions().setInstances(serveursNb);
-    final DeploymentOptions cuisinierOptions = new DeploymentOptions().setInstances(cuisiniersNb);
+    final DeploymentOptions cuisinierOptions = new DeploymentOptions()
+                                                .setInstances(cuisiniersNb)
+                                                .setWorker(true);
 
     //passage des DeploymentOptions au deployVerticle
       final Handler<AsyncResult<String>> restaurantCompletionHandler = ar -> {
