@@ -3,9 +3,11 @@ package com.cara.vertx.Verticles;
 import com.cara.vertx.domain.Client;
 import com.cara.vertx.enums.ClientStatus;
 import com.cara.vertx.enums.CommandeStatus;
+import com.cara.vertx.utils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Counter;
 
@@ -61,9 +63,8 @@ public class ServeurVerticle extends AbstractVerticle {
 
       //Vers -> Cuisinier
       //Definir le head dans le message envoyé
-      DeliveryOptions options = new DeliveryOptions();
-      options.addHeader("Sender", "Serveur");
-      options.addHeader("Receiver", "Cuisinier");
+      DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Cuisinier");
+
       eventBus.send(CuisinierAddress,jsonToEncode, options);
 
       long add = 1;
@@ -85,7 +86,7 @@ public class ServeurVerticle extends AbstractVerticle {
     //Recevoir la reponse de cuisinier
     eventBus.consumer(serveurAddress,req->{
       if (!req.headers().isEmpty()) {
-        System.out.println(req.headers().get("Sender")+" to "+req.headers().get("Receiver"));
+        utils.logFromTo(req);
 
         if (req.headers().get("Sender").equals("Cuisinier")) {
           System.out.println("[Serveur] consumer2 <-" + req.body());
@@ -101,22 +102,12 @@ public class ServeurVerticle extends AbstractVerticle {
           JsonObject jsonToEncode = ClientObjectToJson(client);
           //Vers -> Client
           //Definir le head dans le message envoyé
-          DeliveryOptions options = new DeliveryOptions();
-          options.addHeader("Sender", "Serveur");
-          options.addHeader("Receiver", "Client");
+          DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Client");
           eventBus.send(ClientAddress,jsonToEncode, options);
 
         }
       }
     });
-
-
-
-
-
-
-
-
 
     /**Q4 & Q5 Comptabiliser les clients du restaurant dans un sharedData
      * https://vertx.io/docs/vertx-core/java/#_asynchronous_counters

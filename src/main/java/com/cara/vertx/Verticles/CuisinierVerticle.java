@@ -3,6 +3,7 @@ package com.cara.vertx.Verticles;
 import com.cara.vertx.domain.Client;
 import com.cara.vertx.enums.ClientStatus;
 import com.cara.vertx.enums.CommandeStatus;
+import com.cara.vertx.utils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
@@ -30,12 +31,12 @@ public class CuisinierVerticle extends AbstractVerticle {
     final EventBus eventBus = vertx.eventBus();
     final MessageConsumer<JsonObject> consumer = eventBus.consumer(CuisinierAddress);
     consumer.handler(message -> {
-      System.out.println(message.headers().get("Sender")+" to "+message.headers().get("Receiver"));
+      utils.logFromToJO(message);
       System.out.println(": [Cuisinier] Reception d'une commande <- " + message.body());
       JsonObject jsonObject = JsonObject.mapFrom(message.body());
       Client client = jsonObject.mapTo(Client.class);
       //modifier status client to waiting
-      client.setClientStatus(ClientStatus.CLWAITING);
+      //client.setClientStatus(ClientStatus.CLWAITING);
       client.setCommandeStatus(CommandeStatus.CMDCOOKED);
       JsonObject jsonToEncode = ClientObjectToJson(client);
       //Definir le head dans le message envoyé
