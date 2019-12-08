@@ -29,27 +29,6 @@ public class CuisinierVerticle extends AbstractVerticle {
     final MessageConsumer<JsonObject> consumer = eventBus.consumer(CuisinierAddress);
     /**
      * Q2.(Recevoir le message de Cuisinier)
-     consumer.handler(message -> {
-     utils.logFromToJO(message);
-     System.out.println(": [Cuisinier] Reception d'une commande <- " + message.body());
-     JsonObject jsonObject = JsonObject.mapFrom(message.body());
-
-
-
-     * Q3.(Envoyer le message vers Serveur)
-
-     Client client = jsonObject.mapTo(Client.class);
-     client.setCommandeStatus(CommandeStatus.CMDCOOKED);
-
-     JsonObject jsonToEncode = ClientObjectToJson(client);
-     //Definir le head dans le message envoyé
-     DeliveryOptions options = new DeliveryOptions();
-     options.addHeader("Sender", "Cuisinier");
-     options.addHeader("Receiver", "Serveur");
-
-     eventBus.send(serveurAddress, jsonToEncode, options);
-
-     });
      * */
 
     /**

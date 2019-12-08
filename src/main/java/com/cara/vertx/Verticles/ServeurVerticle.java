@@ -59,8 +59,6 @@ public class ServeurVerticle extends AbstractVerticle {
       /**
        * Q1.(Envoyer vers Cuisinier)
 
-       DeliveryOptions options = utils.getDeliveryOptions("Serveur","Cuisinier");
-       eventBus.send(CuisinierAddress,jsonToEncode, options);
        * */
 
 
@@ -84,30 +82,7 @@ public class ServeurVerticle extends AbstractVerticle {
 
     /**
      * Q4.(Recevoir le message de Cuisinier et envoyer le message vers Client)
-
-     eventBus.consumer(serveurAddress,req->{
-         if (!req.headers().isEmpty()) {
-         utils.logFromTo(req);
-
-           if (req.headers().get("Sender").equals("Cuisinier")) {
-           System.out.println("[Serveur] consumer2 <-" + req.body());
-
-               //receive a message
-               JsonObject jsonObject = JsonObject.mapFrom(req.body());
-               Client client = jsonObject.mapTo(Client.class);
-
-               //modifier status client to waiting
-               client.setClientStatus(ClientStatus.CLORDERPASSED);
-               client.setCommandeStatus(CommandeStatus.CMDSERVED);
-
-               JsonObject jsonToEncode = ClientObjectToJson(client);
-               //Vers -> Client
-               //Definir le head dans le message envoyé
-               DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Client");
-               eventBus.send(ClientAddress,jsonToEncode, options);
-              }
-         }
-     });
+     *
      * */
 
 
