@@ -1,25 +1,23 @@
-= Tp1
+= Tp4
+
 
 image:https://img.shields.io/badge/vert.x-3.8.3-purple.svg[link="https://vertx.io"]
 
-TP Cara Vertx
-
 Contexte:
 
-La préparation de plats en cuisine prend plus ou moins longtemps.
-ce temps passé bloque l'eventloop et pénalise l'application globale.
+On va essayer d'implementer un server HTTP pour qu'on puisse afficher les resultats qu'on recoit sur le console dans une page web.
 
-== Question 1.RestaurantLauncher
-Implementer un worker_verticle
+== Question 1.RestaurantVerticle
 
+Implementer un serveur Http dans la classe RestaurantVerticle.
+Implementer un router vertx.
 
-== Question 2.
-Lancer le jar en mode high availability
--mvn clean install
+== Question 2.RestaurantVerticle
 
+Implementer un handler pour passer les paramateres sur un url specifié
+Passer la reponse vers la route.
 
 == Help
-* https://vertx.io/docs/vertx-core/java/#worker_verticles[Worker_Verticle]
 * https://blog.invivoo.com/vert-x-basics-concurrence-et-scalabilite-avec-les-verticles/[Vert.x Verticles]
 * https://www.mednikov.net/vertx-eventbus/[Vert.x EventBus]
 * https://vertx.io/docs/vertx-core/java/#_asynchronous_counters[Counter]
