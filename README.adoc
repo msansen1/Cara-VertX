@@ -37,7 +37,7 @@ Nombre de Clients dans le Restaurant:2
 
 == Question 4.ServeurVerticle (Recevoir le message de Cuisinier et envoyer le message vers Client)
 
--   Mettre en place la récéption des message du Cuisinier par le cuisinier.
+-   Mettre en place la récéption des message du Cuisinier par le Serveur.
 -   Modifier le status du clinet et de la commande.
 -   Envoyer le message vers client.
 
