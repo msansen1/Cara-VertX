@@ -64,7 +64,9 @@ public class RestaurantVerticle extends AbstractVerticle {
         }
       });
     });
-
+    /**
+     * Q1 et Q2 pour la partie web
+     */
     //recevoir la reponse de Serveur
     eventbus.consumer(clientAddress,res->{
       System.out.println("[Client] <- "+ res.body());
