@@ -39,13 +39,6 @@ public class RestaurantLauncher {
 
     final Vertx vertx = Vertx.vertx();
 
-
-    /**Question 1
-     * Faire en sorte qu'il y ait plus d'une instance de Serveur et de Cuisinier.
-     * Configurer le deploiement pour démarrer les serveurs au nombre de serveursNb(application.properties)
-     * Configurer le deploiement pour démarrer les cuisiniers au nombre de cuisiniersNb(application.properties)
-     */
-
     //Configuration d'options de déploiement
     final DeploymentOptions serveurOptions = new DeploymentOptions().setInstances(serveursNb);
     final DeploymentOptions cuisinierOptions = new DeploymentOptions().setInstances(cuisiniersNb);

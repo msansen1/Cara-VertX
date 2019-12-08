@@ -42,11 +42,6 @@ public class ServeurVerticle extends AbstractVerticle {
 
     final EventBus eventBus = vertx.eventBus();
 
-
-    /**Q3 Mettre en place la reception des messages envoyés par le Restaurant (typés Client envoyés au format Json)
-     *
-     */
-
     eventBus.consumer(serveurAddress, res -> {
 
       //receive a message
@@ -61,11 +56,15 @@ public class ServeurVerticle extends AbstractVerticle {
 
       JsonObject jsonToEncode = ClientObjectToJson(client);
 
-      //Vers -> Cuisinier
-      //Definir le head dans le message envoyé
-      DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Cuisinier");
+      /**
+       * Q1.(Envoyer vers Cuisinier)
 
-      eventBus.send(CuisinierAddress,jsonToEncode, options);
+       DeliveryOptions options = utils.getDeliveryOptions("Serveur","Cuisinier");
+       eventBus.send(CuisinierAddress,jsonToEncode, options);
+       * */
+
+
+
 
       long add = 1;
       vertx
@@ -83,36 +82,38 @@ public class ServeurVerticle extends AbstractVerticle {
       //System.out.println(Json.encode(menu));
     });
 
-    //Recevoir la reponse de cuisinier
-    eventBus.consumer(serveurAddress,req->{
-      if (!req.headers().isEmpty()) {
-        utils.logFromTo(req);
+    /**
+     * Q4.(Recevoir le message de Cuisinier et envoyer le message vers Client)
 
-        if (req.headers().get("Sender").equals("Cuisinier")) {
-          System.out.println("[Serveur] consumer2 <-" + req.body());
+     eventBus.consumer(serveurAddress,req->{
+         if (!req.headers().isEmpty()) {
+         utils.logFromTo(req);
 
-          //receive a message
-          JsonObject jsonObject = JsonObject.mapFrom(req.body());
-          Client client = jsonObject.mapTo(Client.class);
+           if (req.headers().get("Sender").equals("Cuisinier")) {
+           System.out.println("[Serveur] consumer2 <-" + req.body());
 
-          //modifier status client to waiting
-          client.setClientStatus(ClientStatus.CLORDERPASSED);
-          client.setCommandeStatus(CommandeStatus.CMDSERVED);
+               //receive a message
+               JsonObject jsonObject = JsonObject.mapFrom(req.body());
+               Client client = jsonObject.mapTo(Client.class);
 
-          JsonObject jsonToEncode = ClientObjectToJson(client);
-          //Vers -> Client
-          //Definir le head dans le message envoyé
-          DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Client");
-          eventBus.send(ClientAddress,jsonToEncode, options);
+               //modifier status client to waiting
+               client.setClientStatus(ClientStatus.CLORDERPASSED);
+               client.setCommandeStatus(CommandeStatus.CMDSERVED);
 
-        }
-      }
-    });
+               JsonObject jsonToEncode = ClientObjectToJson(client);
+               //Vers -> Client
+               //Definir le head dans le message envoyé
+               DeliveryOptions options = utils.getDeliveryOptions("Serveur", "Client");
+               eventBus.send(ClientAddress,jsonToEncode, options);
+              }
+         }
+     });
+     * */
 
-    /**Q4 & Q5 Comptabiliser les clients du restaurant dans un sharedData
-     * https://vertx.io/docs/vertx-core/java/#_asynchronous_counters
-     *
-     */
+
+
+
+
   }
 
   @Override
