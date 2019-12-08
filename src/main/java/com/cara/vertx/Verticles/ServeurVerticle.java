@@ -31,25 +31,12 @@ public class ServeurVerticle extends AbstractVerticle {
      * cette doc pourrait vous être utile https://www.mednikov.net/vertx-eventbus/
      */
 
-    /*final EventBus eventBus = vertx.eventBus();*/
 
 
     /**Q3 Mettre en place la reception des messages envoyés par le Restaurant (typés Client envoyés au format Json)
      *
      */
 
-    /*eventBus.consumer(serveurAddress, res -> {
-      //receive a message
-      JsonObject jsonObject = JsonObject.mapFrom(res.body());
-      Client client = jsonObject.mapTo(Client.class);
-      System.out.println(client.toString());
-      //JsonObject reply = new JsonObject().put("result", "ok");
-      res.reply(jsonObject);
-
-      //System.out.println(Json.encode(menu));
-
-
-    });*/
 
     /**Q4 & Q5 Comptabiliser les clients du restaurant dans un sharedData
      * https://vertx.io/docs/vertx-core/java/#_asynchronous_counters
