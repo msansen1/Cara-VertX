@@ -85,10 +85,6 @@ public class ServeurVerticle extends AbstractVerticle {
      *
      * */
 
-
-
-
-
   }
 
   @Override

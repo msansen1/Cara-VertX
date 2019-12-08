@@ -31,10 +31,9 @@ public class CuisinierVerticle extends AbstractVerticle {
      * Q2.(Recevoir le message de Cuisinier)
      * */
 
-    /**
 
-   });
-   * */
+
+
 
 
   }
