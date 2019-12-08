@@ -26,7 +26,7 @@ Nombre de Clients dans le Restaurant:2
 
 -   ajouter le code pour envoyer un message on utilisent la méthode send et getDeliveryOptions
 
-== Question 2.CuisinierVerticle (Recevoir le message Cuisinier)
+== Question 2.CuisinierVerticle (Recevoir le message de Serveur)
 
 -   Ajouter le code pour recevoir le message de serveur dans le verticle Cuisinier.
 -   Modifier status de la commande.
