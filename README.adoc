@@ -2,10 +2,17 @@
 
 image:https://img.shields.io/badge/vert.x-3.8.3-purple.svg[link="https://vertx.io"]
 
+Lien vers la présentation https://docs.google.com/presentation/d/1JIeAeLUx5JR9QlSzB_3RGtrn4n02TO_ZhNHJRMfyEWQ/edit?usp=sharing
+
 TP Cara Vertx
 
 Contexte:
-Pour ce Tp 2, on va essayer de communiquer les verticles Serveurs et les cuisiniers et les clients tous d'un seul coup, on aura un serveur qui va envoyer un message vers cuisinier, et que le cuisinier
+Pour ce Tp 2, L'objectif est de faire communiquer les verticles Serveurs, Cuisiniers et Clients.
+- Un serveur envera un message vers cuisinier
+- Le Cuisinier prépare le plat et annonce au serveur 
+- Le serveur sert le client
+
+les messages devront transiter dans cet ordre: serveur->Cuisto->Serveur->Client
 
 ```
 Start of RestaurantLauncher
@@ -20,25 +27,33 @@ End of RestaurantLauncher
 Nombre de Clients dans le Restaurant:1
 [Serveur] consumer1 <- {"id":2,"clientStatus":0,"plat":"","commandeStatus":0}
 Nombre de Clients dans le Restaurant:2
+[Cuisinier] to [Serveur][Serveur] consumer2 <-{"id":1,"clientStatus":1,"plat":"Plat du Jour","commandeStatus":2}
+[Client] <- {"id":1,"clientStatus":2,"plat":"Plat du Jour","commandeStatus":3}
+Nombre de Clients dans le Restaurant:1
+[Serveur] consumer1 <- {"id":2,"clientStatus":0,"plat":"","commandeStatus":0}
+Nombre de Clients dans le Restaurant:2
+[Serveur] to [Cuisinier]: [Cuisinier] Reception d'une commande <- {"id":2,"clientStatus":1,"plat":"La carbonade flamande","commandeStatus":1}
+[Cuisinier] to [Serveur][Serveur] consumer2 <-{"id":2,"clientStatus":1,"plat":"La carbonade flamande","commandeStatus":2}
+[Client] <- {"id":2,"clientStatus":2,"plat":"La carbonade flamande","commandeStatus":3}
 ```
 
 == Question 1.ServeurVerticle (Envoyer message vers Cuisinier)
 
--   ajouter le code pour envoyer un message on utilisent la méthode send et getDeliveryOptions
+-   ajouter le code d'envoi d'un message en utilisant la méthode send et getDeliveryOptions
 
-== Question 2.CuisinierVerticle (Recevoir le message de Serveur)
+== Question 2.CuisinierVerticle (Recevoir le message du Serveur)
 
--   Ajouter le code pour recevoir le message de serveur dans le verticle Cuisinier.
--   Modifier status de la commande.
+-   Ajouter le code pour recevoir le message de commande d'un plat d'un serveur dans le verticle Cuisinier.
+-   Mettre a jour le status de la commande.
 
 == Question 3.CuisinierVerticle (Envoyer le message vers Serveur)
 
--   Ajouter le code pour envoyer le message vers serveur dans le verticle Cuisinier en changeant le status de la commande
+-   Ajouter le code pour envoyer a un serveur le message lui indiquant que le plat est pret  (dans le verticle Cuisinier en changeant le status de la commande)
 
 == Question 4.ServeurVerticle (Recevoir le message de Cuisinier et envoyer le message vers Client)
 
 -   Mettre en place la récéption des message du Cuisinier par le Serveur.
--   Modifier le status du clinet et de la commande.
+-   Modifier le status du client et de la commande.
 -   Envoyer le message vers client.
 
 == Help
