@@ -89,7 +89,7 @@ public class ServeurVerticle extends AbstractVerticle {
         utils.logFromTo(req);
 
         if (req.headers().get("Sender").equals("Cuisinier")) {
-          System.out.println("[Serveur] consumer2 <-" + req.body());
+          System.out.println("[Serveur] consumer <-" + req.body());
 
           //receive a message
           JsonObject jsonObject = JsonObject.mapFrom(req.body());
