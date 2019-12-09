@@ -4,6 +4,9 @@ image:https://img.shields.io/badge/vert.x-3.8.3-purple.svg[link="https://vertx.i
 
 TP Cara Vertx
 
+Lien vers la présentation
+https://docs.google.com/presentation/d/1JIeAeLUx5JR9QlSzB_3RGtrn4n02TO_ZhNHJRMfyEWQ/edit?usp=sharing
+
 Contexte:
 Pour simuler l'arrivée de Clients, Restaurant Vericle adresse des messages Json au Serveur contenant un client et ses états.
 A ce stade, les messages envoyés sont perdus, vous pouvez le constater en lancant l'application:
